@@ -13,7 +13,7 @@ def filter_data(df, column1, column2, filter1, filter2):
     return filtered_df
 
 def main():
-    st.title('HagaZiekenhuis App')
+    st.title('Streamlit Table Filtering App')
 
     uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
 
@@ -22,14 +22,14 @@ def main():
 
         st.write("## Original Data")
         # Display original data as a table
-        st.write(df)
+        st.table(df)
 
         # Dummy button to send data to LLM for processing
         if st.button("Process with Language Model"):
             processed_data = process_with_llm(df)
             st.write("## Processed Data")
             # Display processed data as a table
-            st.write(processed_data)
+            st.table(processed_data)
 
         st.sidebar.title('Filter Data')
 
@@ -46,7 +46,7 @@ def main():
 
         st.write("## Filtered Data")
         # Display filtered data as a table
-        st.write(filtered_df)
+        st.table(filtered_df)
 
         # Button to edit and download filtered data
         edit_filtered_data = st.checkbox("Edit Filtered Data")
@@ -54,7 +54,7 @@ def main():
             st.subheader("Edit Filtered Data")
             st.write("You can edit the filtered data below:")
             # Display editable filtered data as a table
-            edited_filtered_data = st.dataframe(filtered_df, editable=True)
+            edited_filtered_data = st.table(filtered_df)
             st.write("---")
             st.write("After editing, click the button below to download the modified data:")
             st.download_button(label="Download Edited Filtered Data", data=edited_filtered_data.to_csv(index=False), file_name="edited_filtered_data.csv", mime="text/csv")
