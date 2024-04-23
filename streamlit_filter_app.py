@@ -29,21 +29,42 @@ def main():
             st.write("## Processed Data")
             st.write(processed_data)
 
-            st.sidebar.title('Filter Data')
+        st.sidebar.title('Filter Data')
 
-            column1 = st.sidebar.selectbox('Select Column 1', processed_data.columns)
-            column2 = st.sidebar.selectbox('Select Column 2', processed_data.columns)
+        column1 = st.sidebar.selectbox('Select Column 1', df.columns)
+        column2 = st.sidebar.selectbox('Select Column 2', df.columns)
 
-            unique_values_column1 = processed_data[column1].unique()
-            unique_values_column2 = processed_data[column2].unique()
+        unique_values_column1 = df[column1].unique()
+        unique_values_column2 = df[column2].unique()
 
-            filter_value1 = st.sidebar.selectbox('Select Value for Column 1', unique_values_column1)
-            filter_value2 = st.sidebar.selectbox('Select Value for Column 2', unique_values_column2)
+        filter_value1 = st.sidebar.selectbox('Select Value for Column 1', unique_values_column1)
+        filter_value2 = st.sidebar.selectbox('Select Value for Column 2', unique_values_column2)
 
-            filtered_df = filter_data(processed_data, column1, column2, filter_value1, filter_value2)
+        filtered_df = filter_data(df, column1, column2, filter_value1, filter_value2)
 
-            st.write("## Filtered Data")
-            st.write(filtered_df)
+        st.write("## Filtered Data")
+        st.write(filtered_df)
+
+        # Button to edit and download processed data
+        if processed_data is not None:
+            edit_processed_data = st.checkbox("Edit Processed Data")
+            if edit_processed_data:
+                st.subheader("Edit Processed Data")
+                st.write("You can edit the processed data below:")
+                edited_processed_data = st.text_area("Edited Processed Data", processed_data.to_csv(index=False))
+                st.write("---")
+                st.write("After editing, click the button below to download the modified data:")
+                st.download_button(label="Download Edited Processed Data", data=edited_processed_data, file_name="edited_processed_data.csv", mime="text/csv")
+
+        # Button to edit and download filtered data
+        edit_filtered_data = st.checkbox("Edit Filtered Data")
+        if edit_filtered_data:
+            st.subheader("Edit Filtered Data")
+            st.write("You can edit the filtered data below:")
+            edited_filtered_data = st.text_area("Edited Filtered Data", filtered_df.to_csv(index=False))
+            st.write("---")
+            st.write("After editing, click the button below to download the modified data:")
+            st.download_button(label="Download Edited Filtered Data", data=edited_filtered_data, file_name="edited_filtered_data.csv", mime="text/csv")
 
 if __name__ == '__main__':
     main()
