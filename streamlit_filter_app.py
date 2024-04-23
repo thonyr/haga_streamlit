@@ -21,15 +21,13 @@ def main():
         df = pd.read_csv(uploaded_file)
 
         st.write("## Original Data")
-        # Display original data as a table
-        st.table(df)
+        st.write(df)
 
         # Dummy button to send data to LLM for processing
         if st.button("Process with Language Model"):
             processed_data = process_with_llm(df)
             st.write("## Processed Data")
-            # Display processed data as a table
-            st.table(processed_data)
+            st.write(processed_data)
 
         st.sidebar.title('Filter Data')
 
@@ -45,19 +43,28 @@ def main():
         filtered_df = filter_data(df, column1, column2, filter_value1, filter_value2)
 
         st.write("## Filtered Data")
-        # Display filtered data as a table
-        st.table(filtered_df)
+        st.write(filtered_df)
+
+        # Button to edit and download processed data
+        if 'processed_data' in locals():
+            edit_processed_data = st.checkbox("Edit Processed Data")
+            if edit_processed_data:
+                st.subheader("Edit Processed Data")
+                st.write("You can edit the processed data below:")
+                edited_processed_data = st.text_area("Edited Processed Data", processed_data.to_csv(index=False))
+                st.write("---")
+                st.write("After editing, click the button below to download the modified data:")
+                st.download_button(label="Download Edited Processed Data", data=edited_processed_data, file_name="edited_processed_data.csv", mime="text/csv")
 
         # Button to edit and download filtered data
         edit_filtered_data = st.checkbox("Edit Filtered Data")
         if edit_filtered_data:
             st.subheader("Edit Filtered Data")
             st.write("You can edit the filtered data below:")
-            # Display editable filtered data as a table
-            edited_filtered_data = st.table(filtered_df)
+            edited_filtered_data = st.text_area("Edited Filtered Data", filtered_df.to_csv(index=False))
             st.write("---")
             st.write("After editing, click the button below to download the modified data:")
-            st.download_button(label="Download Edited Filtered Data", data=edited_filtered_data.to_csv(index=False), file_name="edited_filtered_data.csv", mime="text/csv")
+            st.download_button(label="Download Edited Filtered Data", data=edited_filtered_data, file_name="edited_filtered_data.csv", mime="text/csv")
 
 if __name__ == '__main__':
     main()
