@@ -46,7 +46,7 @@ def main():
         st.write(filtered_df)
 
         # Button to edit and download processed data
-        if processed_data is not None:
+        if 'processed_data' in locals():
             edit_processed_data = st.checkbox("Edit Processed Data")
             if edit_processed_data:
                 st.subheader("Edit Processed Data")
