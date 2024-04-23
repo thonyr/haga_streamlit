@@ -21,11 +21,11 @@ def main():
         df = pd.read_csv(uploaded_file)
 
         st.write("## Original Data")
-        editable_df = st.dataframe(df, editable=True)
+        editable_df = st.table(df)
 
         # Dummy button to send data to LLM for processing
         if st.button("Process with Language Model"):
-            processed_data = process_with_llm(editable_df)
+            processed_data = process_with_llm(df)
             st.write("## Processed Data")
             st.write(processed_data)
 
@@ -43,17 +43,11 @@ def main():
         filtered_df = filter_data(df, column1, column2, filter_value1, filter_value2)
 
         st.write("## Filtered Data")
-        st.dataframe(filtered_df)
+        st.table(filtered_df)
 
         # Button to edit and download filtered data
         edit_filtered_data = st.checkbox("Edit Filtered Data")
         if edit_filtered_data:
             st.subheader("Edit Filtered Data")
             st.write("You can edit the filtered data below:")
-            edited_filtered_data = st.dataframe(filtered_df, editable=True)
-            st.write("---")
-            st.write("After editing, click the button below to download the modified data:")
-            st.download_button(label="Download Edited Filtered Data", data=edited_filtered_data.to_csv(index=False), file_name="edited_filtered_data.csv", mime="text/csv")
-
-if __name__ == '__main__':
-    main()
+            edited_filtered_data = st.table
