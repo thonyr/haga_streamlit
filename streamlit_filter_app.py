@@ -17,13 +17,14 @@ def select_patients(data):
     selected_columns = st.multiselect("Select Columns", data.columns)
 
     # Filter by column values
+    filtered_data = data
     for column in selected_columns:
         unique_values = data[column].unique()
-        selected_value = st.selectbox(f"Select {column}", unique_values)
-        data = data[data[column] == selected_value]
+        selected_values = st.multiselect(f"Select {column}", unique_values)
+        filtered_data = filtered_data[filtered_data[column].isin(selected_values)]
 
     st.write("Filtered Data:")
-    st.dataframe(data)
+    st.dataframe(filtered_data)
 
 def main():
     st.title("Healthcare Admin Application")
