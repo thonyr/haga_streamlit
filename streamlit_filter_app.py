@@ -33,7 +33,7 @@ def select_patients(data):
             
 def analyze_data(filtered_data):
     if len(filtered_data) > 0:
-        index = 0
+        index = st.session_state.get("index", 0)
         show_entry = True
         while show_entry:
             # Display current row
@@ -54,6 +54,7 @@ def analyze_data(filtered_data):
                 col2.write("End of entries")
             show_entry = col2.button("Show next entry", key="show_next")
 
+        st.session_state["index"] = index
 
 def main():
     st.title("Healthcare Admin Application")
