@@ -63,6 +63,8 @@ def main():
 
     # Second window: Selection of Patients
     if uploaded_data is not None:
+        # Explicitly convert all columns to string type
+        uploaded_data = uploaded_data.astype(str)
         select_patients(uploaded_data)
 
 if __name__ == "__main__":
