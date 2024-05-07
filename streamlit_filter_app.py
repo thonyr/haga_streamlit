@@ -47,9 +47,12 @@ def analyze_data(filtered_data):
         entry_placeholder.write(entry)
 
         # Next and previous buttons with unique keys
-        if st.button("Next" + str(idx)):
+        next_button_key = f"next_button_{idx}"
+        prev_button_key = f"prev_button_{idx}"
+        
+        if st.button("Next", key=next_button_key):
             idx = (idx + 1) % total_entries
-        if st.button("Previous" + str(idx)):
+        if st.button("Previous", key=prev_button_key):
             idx = (idx - 1) % total_entries
 
 def main():
