@@ -26,6 +26,32 @@ def select_patients(data):
     st.write("Filtered Data:")
     st.dataframe(filtered_data)
 
+    # Analyze Data button
+    if st.button("Analyze Data"):
+        analyze_data(filtered_data)
+
+def analyze_data(filtered_data):
+    st.title("Analysis of Patient Data")
+    if not hasattr(analyze_data, "index"):
+        analyze_data.index = 0
+
+    if len(filtered_data) == 0:
+        st.warning("No data to analyze.")
+        return
+
+    current_row = filtered_data.iloc[analyze_data.index]
+
+    st.write("Selected Fields:")
+    st.write("- db_cs_afgelopen_jaar_dbc_diagnosis_code_description:", current_row["db_cs_afgelopen_jaar_dbc_diagnosis_code_description"])
+    st.write("- dbc_diagnosis_code:", current_row["dbc_diagnosis code"])
+
+    # Next and Back buttons
+    col1, col2, col3 = st.columns([1, 4, 1])
+    if col2.button("Back") and analyze_data.index > 0:
+        analyze_data.index -= 1
+    if col2.button("Next") and analyze_data.index < len(filtered_data) - 1:
+        analyze_data.index += 1
+
 def main():
     st.title("Healthcare Admin Application")
 
