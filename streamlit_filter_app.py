@@ -31,6 +31,8 @@ def select_patients(data):
         if len(filtered_data) > 0:
             analyze_data(filtered_data)
 
+    return filtered_data
+
 # Function to analyze each entry in filtered data
 def analyze_data(filtered_data):
     st.title("Analysis of Data")
@@ -63,7 +65,10 @@ def main():
 
     # Second window: Selection of Patients
     if uploaded_data is not None:
-        select_patients(uploaded_data)
+        fil_data = select_patients(uploaded_data)
+
+    if uploaded_data is not None:
+        analyze_data(fil_data)
 
 if __name__ == "__main__":
     main()
