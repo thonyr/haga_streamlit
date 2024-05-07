@@ -37,23 +37,23 @@ def analyze_data(filtered_data):
     idx = 0
     total_entries = len(filtered_data)
 
-    # Create placeholder for entry display
-    entry_placeholder = st.empty()
+    # Navigation buttons
+        index = st.empty()
 
-    # Circular scrolling
-    while True:
-        entry = filtered_data.iloc[idx]
-        entry_placeholder.write(f"Entry {idx+1} of {total_entries}")
-        entry_placeholder.write(entry)
+        if st.button("Previous"):
+            index.subheader("Previous Entry")
+            navigate(-1)
 
-        # Next and previous buttons with unique keys
-        next_button_key = f"next_button_{idx}"
-        prev_button_key = f"prev_button_{idx}"
-        
-        if st.button(f"Next {idx}", key=next_button_key):
-            idx = (idx + 1) % total_entries
-        if st.button(f"Previous {idx}", key=prev_button_key):
-            idx = (idx - 1) % total_entries
+        if st.button("Next"):
+            index.subheader("Next Entry")
+            navigate(1)
+
+def navigate(step):
+    if 'index' not in st.session_state:
+        st.session_state.index = 0
+
+    st.session_state.index = max(0, min(st.session_state.index + step, len(df) - 1))
+    st.write(df.iloc[st.session_state.index])
 
 def main():
     st.title("Healthcare Admin Application")
