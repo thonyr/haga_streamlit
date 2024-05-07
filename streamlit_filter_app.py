@@ -38,15 +38,15 @@ def analyze_data(filtered_data):
     total_entries = len(filtered_data)
 
     # Navigation buttons
-        index = st.empty()
+    index = st.empty()
 
-        if st.button("Previous"):
-            index.subheader("Previous Entry")
-            navigate(-1)
+    if st.button("Previous"):
+        index.subheader("Previous Entry")
+        navigate(-1)
 
-        if st.button("Next"):
-            index.subheader("Next Entry")
-            navigate(1)
+    if st.button("Next"):
+        index.subheader("Next Entry")
+        navigate(1)
 
 def navigate(step):
     if 'index' not in st.session_state:
