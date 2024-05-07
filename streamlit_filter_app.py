@@ -37,23 +37,21 @@ def analyze_data(filtered_data):
     idx = 0
     total_entries = len(filtered_data)
 
-    # Next and previous buttons outside the loop
-    next_button = st.button("Next", key="next_button")
-    prev_button = st.button("Previous", key="prev_button")
+    # Create placeholder for entry display
+    entry_placeholder = st.empty()
 
     # Circular scrolling
     while True:
         entry = filtered_data.iloc[idx]
-        st.write(f"Entry {idx+1} of {total_entries}")
-        st.write(entry)
+        entry_placeholder.write(f"Entry {idx+1} of {total_entries}")
+        entry_placeholder.write(entry)
 
-        # Update index based on button click
-        if next_button:
+        # Next and previous buttons
+        col1, col2 = st.columns(2)
+        if col1.button("Next"):
             idx = (idx + 1) % total_entries
-        elif prev_button:
+        if col2.button("Previous"):
             idx = (idx - 1) % total_entries
-        else:
-            break
 
 def main():
     st.title("Healthcare Admin Application")
@@ -63,8 +61,6 @@ def main():
 
     # Second window: Selection of Patients
     if uploaded_data is not None:
-        # Explicitly convert all columns to string type
-        uploaded_data = uploaded_data.astype(str)
         select_patients(uploaded_data)
 
 if __name__ == "__main__":
