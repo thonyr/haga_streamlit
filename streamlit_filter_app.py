@@ -40,19 +40,20 @@ def analyze_data(filtered_data):
             st.write(f"Entry {index + 1} of {len(filtered_data)}:")
             st.write(filtered_data.iloc[index])
 
-            # Navigation buttons
+            # Navigation buttons with unique keys
             col1, col2, col3 = st.columns([1, 1, 1])
             if index > 0:
-                if col1.button("Previous"):
+                if col1.button("Previous", key=f"prev_{index}"):
                     index -= 1
             if index < len(filtered_data) - 1:
-                if col3.button("Next"):
+                if col3.button("Next", key=f"next_{index}"):
                     index += 1
 
             # Check if end of dataframe reached
             if index == len(filtered_data) - 1:
                 col2.write("End of entries")
             show_entry = col2.button("Show next entry", key="show_next")
+
 
 def main():
     st.title("Healthcare Admin Application")
