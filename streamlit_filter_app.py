@@ -43,10 +43,10 @@ def analyze_data(filtered_data):
         st.write(f"Entry {idx+1} of {total_entries}")
         st.write(entry)
 
-        # Next and previous buttons
-        if st.button("Next"):
+        # Next and previous buttons with unique keys
+        if st.button("Next" + str(idx)):
             idx = (idx + 1) % total_entries
-        if st.button("Previous"):
+        if st.button("Previous" + str(idx)):
             idx = (idx - 1) % total_entries
 
 def main():
