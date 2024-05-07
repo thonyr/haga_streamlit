@@ -46,11 +46,10 @@ def analyze_data(filtered_data):
         entry_placeholder.write(f"Entry {idx+1} of {total_entries}")
         entry_placeholder.write(entry)
 
-        # Next and previous buttons
-        col1, col2 = st.columns(2)
-        if col1.button("Next"):
+        # Next and previous buttons with unique keys
+        if st.button("Next" + str(idx)):
             idx = (idx + 1) % total_entries
-        if col2.button("Previous"):
+        if st.button("Previous" + str(idx)):
             idx = (idx - 1) % total_entries
 
 def main():
