@@ -26,31 +26,28 @@ def select_patients(data):
     st.write("Filtered Data:")
     st.dataframe(filtered_data)
 
-    # Analyze Data button
-    if st.button("Analyze Data"):
-        analyze_data(filtered_data)
+    # Analyse data button
+    if st.button("Analyse data"):
+        if len(filtered_data) > 0:
+            analyze_data(filtered_data)
 
+# Function to analyze each entry in filtered data
 def analyze_data(filtered_data):
-    st.title("Analysis of Patient Data")
-    if not hasattr(analyze_data, "index"):
-        analyze_data.index = 0
+    st.title("Analysis of Data")
+    idx = 0
+    total_entries = len(filtered_data)
 
-    if len(filtered_data) == 0:
-        st.warning("No data to analyze.")
-        return
+    # Circular scrolling
+    while True:
+        entry = filtered_data.iloc[idx]
+        st.write(f"Entry {idx+1} of {total_entries}")
+        st.write(entry)
 
-    current_row = filtered_data.iloc[analyze_data.index]
-
-    st.write("Selected Fields:")
-    st.write("- db_cs_afgelopen_jaar_dbc_diagnosis_code_description:", current_row["db_cs_afgelopen_jaar_dbc_diagnosis_code_description"])
-    st.write("- dbc_diagnosis_code:", current_row["dbc_diagnosis_code"])
-
-    # Next and Back buttons
-    col1, col2, col3 = st.columns([1, 4, 1])
-    if col2.button("Back") and analyze_data.index > 0:
-        analyze_data.index -= 1
-    if col2.button("Next") and analyze_data.index < len(filtered_data) - 1:
-        analyze_data.index += 1
+        # Next and previous buttons
+        if st.button("Next"):
+            idx = (idx + 1) % total_entries
+        if st.button("Previous"):
+            idx = (idx - 1) % total_entries
 
 def main():
     st.title("Healthcare Admin Application")
