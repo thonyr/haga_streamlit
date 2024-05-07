@@ -42,8 +42,8 @@ def analyze_data(filtered_data):
     current_row = filtered_data.iloc[analyze_data.index]
 
     st.write("Selected Fields:")
-    st.write("Medical Note:", current_row["db_cs_afgelopen_jaar_dbc_diagnosis_code_description"])
-    st.write("Current DBC:", current_row["dbc_diagnosis_code"])
+    st.write("- db_cs_afgelopen_jaar_dbc_diagnosis_code_description:", current_row["db_cs_afgelopen_jaar_dbc_diagnosis_code_description"])
+    st.write("- dbc_diagnosis_code:", current_row["dbc_diagnosis code"])
 
     # Next and Back buttons
     col1, col2, col3 = st.columns([1, 4, 1])
