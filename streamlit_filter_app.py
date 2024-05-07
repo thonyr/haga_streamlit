@@ -31,23 +31,24 @@ def select_patients(data):
         if len(filtered_data) > 0:
             analyze_data(filtered_data)
             
-    if len(filtered_data) > 0:
+def analyze_data(filtered_df)
+    if len(filtered_df) > 0:
             index = 0
             show_entry = True
             while show_entry:
                 # Display current row
-                st.write(f"Entry {index + 1} of {len(filtered_data)}:")
-                st.write(filtered_data.iloc[index])
+                st.write(f"Entry {index + 1} of {len(filtered_df)}:")
+                st.write(filtered_df.iloc[index])
 
                 # Navigation buttons
                 col1, col2, col3 = st.columns([1, 1, 1])
                 if col2.button("Next"):
-                    index = (index + 1) % len(filtered_data)
+                    index = (index + 1) % len(filtered_df)
                 if col1.button("Previous"):
-                    index = (index - 1) % len(filtered_data)
+                    index = (index - 1) % len(filtered_df)
 
                 # Check if end of dataframe reached
-                if index == len(filtered_data) - 1:
+                if index == len(filtered_df) - 1:
                     col2.write("End of entries")
                 show_entry = col2.button("Show next entry", key="show_next")
 
