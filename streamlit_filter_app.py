@@ -50,9 +50,9 @@ def analyze_data(filtered_data):
         next_button_key = f"next_button_{idx}"
         prev_button_key = f"prev_button_{idx}"
         
-        if st.button("Next", key=next_button_key):
+        if st.button(f"Next {idx}", key=next_button_key):
             idx = (idx + 1) % total_entries
-        if st.button("Previous", key=prev_button_key):
+        if st.button(f"Previous {idx}", key=prev_button_key):
             idx = (idx - 1) % total_entries
 
 def main():
