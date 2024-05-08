@@ -38,7 +38,7 @@ def process_csv(file, available_time):
 
 # Main function for Streamlit app
 def main():
-    st.title('CSV Analyzer App')
+    st.title('HagaZiekenhuis Healthcare Administration App')
     st.write('Upload a CSV file to analyze')
     available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
