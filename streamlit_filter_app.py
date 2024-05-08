@@ -38,7 +38,7 @@ def process_csv(file, available_time):
 
 # Main function for Streamlit app
 def main():
-    st.title('CSV Analyzer App')
+    st.title('HagaZiekenhuis Zorgadministratie')
     st.write('Upload a CSV file to analyze')
     available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
@@ -51,16 +51,21 @@ def main():
         if 'current_index' not in st.session_state:
             st.session_state.current_index = 0
 
-        # Display current entry
+        # Display current entry in tabulated format
         st.write("Filtered Data:")
         current_row = filtered_df.iloc[st.session_state.current_index]
-        st.write(f"Patient {st.session_state.current_index + 1}:")
-        st.write(f"Naslag Report Content: {current_row['naslag_report_content']}")
-        st.write(f"DBC Diagnosis Code: {current_row['dbc_diagnosis_code']}")
-        st.write(f"Consult Date Zorg Activiteiten: {current_row['consult_date_zorg_activiteiten']}")
-        st.write(f"Corrected DBC: {current_row['corrected_dbc']}")
-        st.write(f"DBC Switch: {current_row['dbc_switch']}")
-        
+        table_data = {
+            'Field': ['Naslag Report Content', 'DBC Diagnosis Code', 'Consult Date Zorg Activiteiten', 'Corrected DBC', 'DBC Switch'],
+            'Value': [
+                current_row['naslag_report_content'],
+                current_row['dbc_diagnosis_code'],
+                current_row['consult_date_zorg_activiteiten'],
+                current_row['corrected_dbc'],
+                current_row['dbc_switch']
+            ]
+        }
+        st.table(pd.DataFrame(table_data).style.set_properties(**{'font-weight': 'bold'}))
+
         # Navigation buttons
         col1, col2, col3 = st.columns([1, 1, 1])
         if col2.button('Previous') and st.session_state.current_index > 0:
