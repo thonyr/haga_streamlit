@@ -15,14 +15,6 @@ def calculate_entries(num_entries, available_time):
     else:
         return int((available_time / total_hours) * num_entries)
 
-# Function to calculate average of a column
-def calculate_average(column):
-    return np.mean(column)
-
-# Function to generate random placeholder values
-def generate_placeholder():
-    return np.random.randint(1, 15)
-
 # Function to process uploaded CSV file
 def process_csv(file, available_time):
     df = pd.read_csv(file)
@@ -38,7 +30,7 @@ def process_csv(file, available_time):
 
 # Main function for Streamlit app
 def main():
-    st.title('HagaZiekenhuis Healthcare Administration App')
+    st.title('CSV Analyzer App')
     st.write('Upload a CSV file to analyze')
     available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
@@ -53,9 +45,9 @@ def main():
 
         # Display current entry in tabulated format
         st.write("Filtered Data:")
-        current_row = filtered_df.iloc[st.session_state.current_index]
-        dbc_diagnosis_code = st.text_input('DBC Diagnosis Code', current_row['dbc_diagnosis_code'])
-        filtered_df.loc[current_row.name, 'dbc_diagnosis_code'] = dbc_diagnosis_code
+        current_row = filtered_df.loc[st.session_state.current_index]
+        dbc_diagnosis_code = st.text_input('DBC Diagnosis Code', str(current_row['dbc_diagnosis_code']))  # Ensure it's a string
+        filtered_df.loc[current_row.name, 'dbc_diagnosis_code'] = int(dbc_diagnosis_code)  # Explicitly cast to int
 
         table_data = {
             'Field': ['Naslag Report Content', 'DBC Diagnosis Code', 'Consult Date Zorg Activiteiten', 'Corrected DBC', 'DBC Switch'],
