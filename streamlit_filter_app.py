@@ -38,7 +38,7 @@ def process_csv(file, available_time):
 
 # Main function for Streamlit app
 def main():
-    st.title('HagaZiekenhuis Zorgadministratie')
+    st.title('CSV Analyzer App')
     st.write('Upload a CSV file to analyze')
     available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
@@ -58,7 +58,7 @@ def main():
             'Field': ['Naslag Report Content', 'DBC Diagnosis Code', 'Consult Date Zorg Activiteiten', 'Corrected DBC', 'DBC Switch'],
             'Value': [
                 current_row['naslag_report_content'],
-                current_row['dbc_diagnosis_code'],
+                st.text_input('DBC Diagnosis Code', current_row['dbc_diagnosis_code']),
                 current_row['consult_date_zorg_activiteiten'],
                 current_row['corrected_dbc'],
                 current_row['dbc_switch']
@@ -72,6 +72,21 @@ def main():
             st.session_state.current_index -= 1
         if col3.button('Next') and st.session_state.current_index < len(filtered_df) - 1:
             st.session_state.current_index += 1
+
+        # Save button
+        if st.button('Save'):
+            filtered_df.iloc[st.session_state.current_index]['dbc_diagnosis_code'] = table_data['Value'][1]
+
+        # Export to CSV button
+        if st.button('Export to CSV'):
+            export_df = filtered_df[['naslag_report_content', 'dbc_diagnosis_code', 'consult_date_zorg_activiteiten', 'corrected_dbc', 'dbc_switch']]
+            csv = export_df.to_csv(index=False)
+            st.download_button(
+                label="Download CSV",
+                data=csv,
+                file_name='filtered_data.csv',
+                mime='text/csv'
+            )
 
 if __name__ == '__main__':
     main()
