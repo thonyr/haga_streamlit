@@ -45,7 +45,7 @@ def main():
 
         # Display current entry in tabulated format
         st.write("Filtered Data:")
-        current_row = filtered_df.loc[st.session_state.current_index]
+        current_row = filtered_df.iloc[st.session_state.current_index]
         dbc_diagnosis_code = st.text_input('DBC Diagnosis Code', str(current_row['dbc_diagnosis_code']))  # Ensure it's a string
         filtered_df.loc[current_row.name, 'dbc_diagnosis_code'] = int(dbc_diagnosis_code)  # Explicitly cast to int
 
