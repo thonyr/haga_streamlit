@@ -75,7 +75,7 @@ def main():
 
         # Save button
         if st.button('Save'):
-            filtered_df.iloc[st.session_state.current_index]['dbc_diagnosis_code'] = table_data['Value'][1]
+            filtered_df.at[st.session_state.current_index, 'dbc_diagnosis_code'] = table_data['Value'][1]
 
         # Export to CSV button
         if st.button('Export to CSV'):
