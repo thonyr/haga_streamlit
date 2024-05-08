@@ -1,72 +1,62 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
-# Function to upload CSV file
-def upload_csv():
-    uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
-    if uploaded_file is not None:
-        data = pd.read_csv(uploaded_file)
-        return data
+# Function to calculate time required to check the CSV
+def calculate_time(num_entries):
+    total_hours = (num_entries / 1000) * 10
+    return total_hours
 
-# Function to display selection of patients
-def select_patients(data):
-    st.title("Selection of Patients")
-    st.dataframe(data)
+# Function to calculate the number of entries based on user-defined time
+def calculate_entries(num_entries, available_time):
+    total_hours = calculate_time(num_entries)
+    if total_hours <= available_time:
+        return num_entries
+    else:
+        return int((available_time / total_hours) * num_entries)
 
-    # Filter by column headers
-    selected_columns = st.multiselect("Select Columns", data.columns)
+# Function to calculate average of a column
+def calculate_average(column):
+    return np.mean(column)
 
-    # Filter by column values
-    filtered_data = data
-    for column in selected_columns:
-        unique_values = data[column].unique()
-        selected_values = st.multiselect(f"Select {column}", unique_values)
-        filtered_data = filtered_data[filtered_data[column].isin(selected_values)]
+# Function to generate random placeholder values
+def generate_placeholder():
+    return np.random.randint(1, 15)
 
-    st.write("Filtered Data:")
-    st.dataframe(filtered_data)
+# Function to process uploaded CSV file
+def process_csv(file, available_time):
+    df = pd.read_csv(file)
+    num_entries = len(df)
+    num_filtered_entries = calculate_entries(num_entries, available_time)
+    
+    # Sorting the dataframe based on revenue_difference
+    df_sorted = df.sort_values(by='revenue_difference', ascending=False)
+    
+    filtered_df = df_sorted.head(num_filtered_entries)
+    
+    average_revenue_difference = calculate_average(filtered_df['revenue_difference'])
+    average_switch_change = generate_placeholder()
+    dbc_full_percentage = generate_placeholder()
+    average_count_score = generate_placeholder()
+    
+    return num_filtered_entries, average_revenue_difference, average_switch_change, dbc_full_percentage, average_count_score
 
-    # Analyse data button
-    if st.button("Analyse data"):
-        if len(filtered_data) > 0:
-            analyze_data(filtered_data)
-            
-def analyze_data(filtered_data):
-    if len(filtered_data) > 0:
-        index = st.session_state.get("index", 0)
-        show_entry = True
-        while show_entry:
-            # Display current row
-            st.write(f"Entry {index + 1} of {len(filtered_data)}:")
-            st.write(filtered_data.iloc[index])
-
-            # Navigation buttons with unique keys
-            col1, col2, col3 = st.columns([1, 1, 1])
-            if index > 0:
-                if col1.button("Previous", key=f"prev_{index}"):
-                    index -= 1
-            if index < len(filtered_data) - 1:
-                if col3.button("Next", key=f"next_{index}"):
-                    index += 1
-
-            # Check if end of dataframe reached
-            if index == len(filtered_data) - 1:
-                col2.write("End of entries")
-            show_entry = col2.button("Show next entry", key="show_next")
-
-        st.session_state["index"] = index
-
+# Main function for Streamlit app
 def main():
-    st.title("Healthcare Admin Application")
+    st.title('CSV Analyzer App')
+    st.write('Upload a CSV file to analyze')
+    available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
-    # First window: Upload CSV
-    uploaded_data = upload_csv()
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
-    # Second window: Selection of Patients
-    if uploaded_data is not None:
-        # Explicitly convert all columns to string type
-        uploaded_data = uploaded_data.astype(str)
-        select_patients(uploaded_data)
+    if uploaded_file is not None:
+        num_entries, avg_revenue_diff, avg_switch_change, dbc_full_percentage, avg_count_score = process_csv(uploaded_file, available_time)
 
-if __name__ == "__main__":
+        st.write(f"Number of Patients: {num_entries}")
+        st.write(f"Average Revenue Difference: {avg_revenue_diff}")
+        st.write(f"Average Change of Switch: {avg_switch_change}")
+        st.write(f"DBC Full Percentage: {dbc_full_percentage}")
+        st.write(f"Average Count Score: {avg_count_score}")
+
+if __name__ == '__main__':
     main()
