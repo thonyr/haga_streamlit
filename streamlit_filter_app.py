@@ -28,9 +28,16 @@ def process_csv(file, available_time):
     
     return filtered_df
 
+# Function to generate random percentages
+def generate_random_percentages():
+    return {
+        'avg. chance of switch': np.random.uniform(0, 100),
+        'DBC full percent': np.random.uniform(0, 100)
+    }
+
 # Main function for Streamlit app
 def main():
-    st.title('HagaZiekenhuis Healthcate Administration App')
+    st.title('HagaZiekenhuis Healthcare Administration App')
     st.write('Upload a CSV file to analyze')
     available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
@@ -38,6 +45,18 @@ def main():
 
     if uploaded_file is not None:
         filtered_df = process_csv(uploaded_file, available_time)
+
+        # Additional pane displaying values
+        st.sidebar.title('Additional Information')
+        st.sidebar.subheader('Statistics:')
+        st.sidebar.write(f"Number of Patients: {len(filtered_df)}")
+        st.sidebar.write(f"Average Revenue Difference: {filtered_df['revenue_difference'].mean()}")
+
+        # Random percentages
+        st.sidebar.subheader('Random Percentages:')
+        random_percentages = generate_random_percentages()
+        for field, value in random_percentages.items():
+            st.sidebar.write(f"{field}: {value:.2f}%")
 
         # Initialize current index
         if 'current_index' not in st.session_state:
