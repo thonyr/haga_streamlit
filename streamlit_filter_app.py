@@ -34,12 +34,7 @@ def process_csv(file, available_time):
     
     filtered_df = df_sorted.head(num_filtered_entries)
     
-    average_revenue_difference = calculate_average(filtered_df['revenue_difference'])
-    average_switch_change = generate_placeholder()
-    dbc_full_percentage = generate_placeholder()
-    average_count_score = generate_placeholder()
-    
-    return num_filtered_entries, average_revenue_difference, average_switch_change, dbc_full_percentage, average_count_score
+    return filtered_df
 
 # Main function for Streamlit app
 def main():
@@ -50,13 +45,17 @@ def main():
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
     if uploaded_file is not None:
-        num_entries, avg_revenue_diff, avg_switch_change, dbc_full_percentage, avg_count_score = process_csv(uploaded_file, available_time)
-
-        st.write(f"Number of Patients: {num_entries}")
-        st.write(f"Average Revenue Difference: {avg_revenue_diff}")
-        st.write(f"Average Change of Switch: {avg_switch_change}")
-        st.write(f"DBC Full Percentage: {dbc_full_percentage}")
-        st.write(f"Average Count Score: {avg_count_score}")
+        if st.button('Select Patients'):
+            filtered_df = process_csv(uploaded_file, available_time)
+            st.write("Filtered Data:")
+            for index, row in filtered_df.iterrows():
+                st.write(f"Patient {index+1}:")
+                st.write(f"Naslag Report Content: {row['naslag_report_content']}")
+                st.write(f"DBC Diagnosis Code: {row['dbc_diagnosis_code']}")
+                st.write(f"Consult Date Zorg Activiteiten: {row['consult_date_zorg_activiteiten']}")
+                st.write(f"Corrected DBC: {row['corrected_dbc']}")
+                st.write(f"DBC Switch: {row['dbc_switch']}")
+                st.write("---")
 
 if __name__ == '__main__':
     main()
