@@ -42,12 +42,13 @@ def main():
         # Initialize current index
         if 'current_index' not in st.session_state:
             st.session_state.current_index = 0
+            st.session_state.filtered_df = filtered_df  # Store the filtered DataFrame in session state
 
         # Display current entry in tabulated format
         st.write("Filtered Data:")
-        current_row = filtered_df.iloc[st.session_state.current_index]
+        current_row = st.session_state.filtered_df.iloc[st.session_state.current_index]
         dbc_diagnosis_code = st.text_input('DBC Diagnosis Code', str(current_row['dbc_diagnosis_code']))  # Ensure it's a string
-        filtered_df.loc[current_row.name, 'dbc_diagnosis_code'] = int(dbc_diagnosis_code)  # Explicitly cast to int
+        st.session_state.filtered_df.loc[current_row.name, 'dbc_diagnosis_code'] = int(dbc_diagnosis_code)  # Explicitly cast to int
 
         table_data = {
             'Field': ['Naslag Report Content', 'DBC Diagnosis Code', 'Consult Date Zorg Activiteiten', 'Corrected DBC', 'DBC Switch'],
@@ -65,12 +66,12 @@ def main():
         col1, col2, col3 = st.columns([1, 1, 1])
         if col2.button('Previous') and st.session_state.current_index > 0:
             st.session_state.current_index -= 1
-        if col3.button('Next') and st.session_state.current_index < len(filtered_df) - 1:
+        if col3.button('Next') and st.session_state.current_index < len(st.session_state.filtered_df) - 1:
             st.session_state.current_index += 1
 
         # Export to CSV button
         if st.button('Export to CSV'):
-            csv = filtered_df.to_csv(index=False)
+            csv = st.session_state.filtered_df.to_csv(index=False)
             st.download_button(
                 label="Download CSV",
                 data=csv,
