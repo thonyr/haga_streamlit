@@ -54,11 +54,14 @@ def main():
         # Display current entry in tabulated format
         st.write("Filtered Data:")
         current_row = filtered_df.iloc[st.session_state.current_index]
+        dbc_diagnosis_code = st.text_input('DBC Diagnosis Code', current_row['dbc_diagnosis_code'])
+        current_row['dbc_diagnosis_code'] = dbc_diagnosis_code
+
         table_data = {
             'Field': ['Naslag Report Content', 'DBC Diagnosis Code', 'Consult Date Zorg Activiteiten', 'Corrected DBC', 'DBC Switch'],
             'Value': [
                 current_row['naslag_report_content'],
-                st.text_input('DBC Diagnosis Code', current_row['dbc_diagnosis_code']),
+                dbc_diagnosis_code,
                 current_row['consult_date_zorg_activiteiten'],
                 current_row['corrected_dbc'],
                 current_row['dbc_switch']
@@ -72,12 +75,6 @@ def main():
             st.session_state.current_index -= 1
         if col3.button('Next') and st.session_state.current_index < len(filtered_df) - 1:
             st.session_state.current_index += 1
-
-        # Save button
-        if st.button('Save'):
-            #filtered_df.loc[st.session_state.current_index, 'dbc_diagnosis_code'] = str(table_data['Value'][1])
-            table_data['Value'] = [str(value) for value in table_data['Value']]
-            filtered_df.loc[st.session_state.current_index, 'dbc_diagnosis_code'] = table_data['Value'][1]
 
         # Export to CSV button
         if st.button('Export to CSV'):
