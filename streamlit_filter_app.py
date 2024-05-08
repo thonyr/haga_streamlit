@@ -55,7 +55,7 @@ def main():
         st.write("Filtered Data:")
         current_row = filtered_df.iloc[st.session_state.current_index]
         dbc_diagnosis_code = st.text_input('DBC Diagnosis Code', current_row['dbc_diagnosis_code'])
-        current_row['dbc_diagnosis_code'] = dbc_diagnosis_code
+        filtered_df.loc[current_row.name, 'dbc_diagnosis_code'] = dbc_diagnosis_code
 
         table_data = {
             'Field': ['Naslag Report Content', 'DBC Diagnosis Code', 'Consult Date Zorg Activiteiten', 'Corrected DBC', 'DBC Switch'],
@@ -78,8 +78,7 @@ def main():
 
         # Export to CSV button
         if st.button('Export to CSV'):
-            export_df = filtered_df[['naslag_report_content', 'dbc_diagnosis_code', 'consult_date_zorg_activiteiten', 'corrected_dbc', 'dbc_switch']]
-            csv = export_df.to_csv(index=False)
+            csv = filtered_df.to_csv(index=False)
             st.download_button(
                 label="Download CSV",
                 data=csv,
