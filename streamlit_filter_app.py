@@ -75,7 +75,9 @@ def main():
 
         # Save button
         if st.button('Save'):
-            filtered_df.loc[st.session_state.current_index, 'dbc_diagnosis_code'] = str(table_data['Value'][1])
+            #filtered_df.loc[st.session_state.current_index, 'dbc_diagnosis_code'] = str(table_data['Value'][1])
+            table_data['Value'] = [str(value) for value in table_data['Value']]
+            filtered_df.loc[st.session_state.current_index, 'dbc_diagnosis_code'] = table_data['Value'][1]
 
         # Export to CSV button
         if st.button('Export to CSV'):
