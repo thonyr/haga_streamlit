@@ -45,17 +45,28 @@ def main():
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
     if uploaded_file is not None:
-        if st.button('Select Patients'):
-            filtered_df = process_csv(uploaded_file, available_time)
-            st.write("Filtered Data:")
-            for index, row in filtered_df.iterrows():
-                st.write(f"Patient {index+1}:")
-                st.write(f"Naslag Report Content: {row['naslag_report_content']}")
-                st.write(f"DBC Diagnosis Code: {row['dbc_diagnosis_code']}")
-                st.write(f"Consult Date Zorg Activiteiten: {row['consult_date_zorg_activiteiten']}")
-                st.write(f"Corrected DBC: {row['corrected_dbc']}")
-                st.write(f"DBC Switch: {row['dbc_switch']}")
-                st.write("---")
+        filtered_df = process_csv(uploaded_file, available_time)
+
+        # Initialize current index
+        if 'current_index' not in st.session_state:
+            st.session_state.current_index = 0
+
+        # Display current entry
+        st.write("Filtered Data:")
+        current_row = filtered_df.iloc[st.session_state.current_index]
+        st.write(f"Patient {st.session_state.current_index + 1}:")
+        st.write(f"Naslag Report Content: {current_row['naslag_report_content']}")
+        st.write(f"DBC Diagnosis Code: {current_row['dbc_diagnosis_code']}")
+        st.write(f"Consult Date Zorg Activiteiten: {current_row['consult_date_zorg_activiteiten']}")
+        st.write(f"Corrected DBC: {current_row['corrected_dbc']}")
+        st.write(f"DBC Switch: {current_row['dbc_switch']}")
+        
+        # Navigation buttons
+        col1, col2, col3 = st.columns([1, 1, 1])
+        if col2.button('Previous') and st.session_state.current_index > 0:
+            st.session_state.current_index -= 1
+        if col3.button('Next') and st.session_state.current_index < len(filtered_df) - 1:
+            st.session_state.current_index += 1
 
 if __name__ == '__main__':
     main()
