@@ -36,46 +36,16 @@ def process_csv(file, available_time):
     
     return filtered_df
 
-def retrieve_stats(file):
-    try:
-        df1 = pd.read_csv(file)
-        num_entries = len(df1)
-        average_revenue_difference = calculate_average(df1['revenue_difference'])
-        average_switch_change = generate_placeholder()
-        dbc_full_percentage = generate_placeholder()
-        average_count_score = generate_placeholder()
-        return num_entries, average_revenue_difference, average_switch_change, dbc_full_percentage, average_count_score
-    except pd.errors.EmptyDataError:
-        st.error("The uploaded file is empty or contains no data.")
-
 # Main function for Streamlit app
 def main():
-    st.title('HagaZiekenhuis Zorg Administratie')
+    st.title('CSV Analyzer App')
     st.write('Upload a CSV file to analyze')
     available_time = st.slider("How much time do you have? (in hours)", 0, 12, 5)
 
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
     if uploaded_file is not None:
-        
-        num_entries, avg_revenue_diff, avg_switch_change, dbc_full_percentage, avg_count_score = retrieve_stats(uploaded_file)
-
-        # Display basic statistics about the uploaded CSV file
-        st.write("Basic Statistics:")
-        stats_data = {
-                'Statistic': ['Number of Patients', 'Average Revenue Difference', 'Average Change of Switch', 'DBC Full Percentage', 'Average Count Score'],
-                'Value': [
-                    num_entries,
-                    avg_revenue_diff,
-                    avg_switch_change,
-                    dbc_full_percentage,
-                    avg_count_score
-                ]
-            }
-        st.table(pd.DataFrame(stats_data).style.set_properties(**{'font-weight': 'bold'}))
-
         filtered_df = process_csv(uploaded_file, available_time)
-
 
         # Initialize current index
         if 'current_index' not in st.session_state:
