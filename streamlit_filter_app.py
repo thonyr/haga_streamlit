@@ -38,9 +38,9 @@ def process_csv(file, available_time):
 
 def retrieve_stats(file):
     try:
-        df = pd.read_csv(file)
-        num_entries = len(df)
-        average_revenue_difference = calculate_average(df['revenue_difference'])
+        df1 = pd.read_csv(file)
+        num_entries = len(df1)
+        average_revenue_difference = calculate_average(df1['revenue_difference'])
         average_switch_change = generate_placeholder()
         dbc_full_percentage = generate_placeholder()
         average_count_score = generate_placeholder()
