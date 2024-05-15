@@ -33,7 +33,6 @@ def main():
     with col2:
         st.markdown("# Cardiologie onderregistratie")
     
-    
     # Initialize session state
     if 'filtered_df' not in st.session_state:
         st.session_state.filtered_df = None
@@ -84,7 +83,6 @@ def main():
                 st.rerun()
 
             st.write("---")
-            
 
             nr_patients_within_time = int(st.session_state.available_time * 60)  # Ensure this is an integer
             st.write(f"Number of Patients: **{nr_patients_within_time}**")
@@ -143,7 +141,7 @@ def main():
             # Create a markdown table with line breaks, using a dummy header for structure
             markdown_table = "|  |\n| --- |\n"
             for val in df_values['Value']:
-                markdown_table += f"| {str(val).replace('\n', '<br>')} |\n"
+                markdown_table += "| {} |\n".format(str(val).replace('\n', '<br>'))
 
             # Display the markdown table
             st.markdown(markdown_table, unsafe_allow_html=True)
