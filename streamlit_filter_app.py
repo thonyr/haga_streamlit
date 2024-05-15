@@ -32,6 +32,8 @@ def main():
         st.image("haga.png")
     with col2:
         st.markdown("# Cardiologie onderregistratie")
+
+    st.subheader("DIT IS EEN TEST-VERSIE MET SYNTHETISCHE DATA")
     
     # Initialize session state
     if 'filtered_df' not in st.session_state:
