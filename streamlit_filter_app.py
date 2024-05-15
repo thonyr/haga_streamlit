@@ -198,7 +198,9 @@ def main():
         
         st.subheader("Evaluatie huidige sessie")
         st.write(f"Sessie beëindigd. Aantal geëvalueerde records: **{len(evaluated_records)}**")
-        st.write(f'Aantal gewijzigde DBC-codes: **{evaluated_records["dbc_diagnosis_code"].eq(evaluated_records["corrected_dbc"]).sum()}**')
+        changed_dbc_count = (evaluated_records['dbc_diagnosis_code'] != evaluated_records['corrected_dbc']).sum()
+        st.write(f'Aantal gewijzigde DBC-codes: **{changed_dbc_count}**')
+
 
         total_revenue_difference = evaluated_records[evaluated_records['dbc_diagnosis_code'] != evaluated_records['corrected_dbc']]['revenue_difference'].sum()
         st.write(f"Totaal revenue difference van geëvalueerde records: **€{total_revenue_difference:,.2f}**")
