@@ -1,9 +1,28 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import streamlit.components.v1 as components
 
 # Static variables that are going to be retrieved from the real data
 DUMMY_NR_OF_PATIENTS = 1000
+
+# Function to render the clickable link for patient_id
+def render_copy_link(patient_id):
+    # JavaScript code to create a clickable link that copies the patient_id to the clipboard
+    copy_link_html = f"""
+    <script>
+        function copyToClipboard(text) {{
+            navigator.clipboard.writeText(text).then(function() {{
+                console.log('Patient ID copied to clipboard: ' + text);
+            }}, function(err) {{
+                console.error('Error copying text: ', err);
+            }});
+        }}
+    </script>
+    <b>Patiëntnummer:</b> <a href="#" onclick="copyToClipboard('{patient_id}'); return false;">{patient_id}</a>
+    """
+    # Use Streamlit's components.html to render the HTML and JavaScript
+    components.html(copy_link_html, height=30)
 
 # Function to process CSV data
 def process_csv(file):
@@ -17,7 +36,7 @@ def process_csv(file):
 def main():
     st.markdown(
         """
-        <style>
+         <style>
         .main {
             max-width: 1800px;
             margin: 0 auto;
@@ -87,7 +106,7 @@ def main():
             st.write("---")
 
             nr_patients_within_time = int(st.session_state.available_time * 60)  # Ensure this is an integer
-            st.write(f"Number of Patients: **{nr_patients_within_time}**")
+            st.write(f"Aantal patiënten: **{nr_patients_within_time}**")
             st.write(f"Verwachte tijd om te controleren: **{round(st.session_state.available_time,1)} uur**")
             
             # Sum the product of 'revenue_difference' and 'dbc_switch' for the first 'nr_patients_within_time' entries
@@ -100,10 +119,10 @@ def main():
 
             # Number of full DBC codes in the first nr_patients_within_time
             percentage_full_patients = round(st.session_state.filtered_df['full'].iloc[:nr_patients_within_time].mean() * 100, 2)
-            st.write(f"Percentage of patients with full DBC codes: **{percentage_full_patients}%**")
+            st.write(f"Percentage met volle DBC codes: **{percentage_full_patients}%**")
 
             average_count_score = round(st.session_state.filtered_df['count_score'].iloc[:nr_patients_within_time].mean(), 2)
-            st.write(f"Average count score for {nr_patients_within_time} patients: **{average_count_score}**")
+            st.write(f"Gemiddelde score : **{average_count_score}**")
 
             average_switch_percentage = round(st.session_state.filtered_df['full'].iloc[:nr_patients_within_time].mean() * 100, 2)
             st.write(f"Gemiddeld aantal volle dbc's: **{average_switch_percentage}%**")
@@ -125,11 +144,11 @@ def main():
 
             # Mark the current record as evaluated
             st.session_state.filtered_df.at[current_row.name, 'evaluated_by_doctor'] = True
-
+            render_copy_link(current_row['patient_id'])
             # Create a DataFrame with only the values
             values_data = {
                 'Value': [
-                    "<B>Patientnummer:</B> " + str(current_row['patient_id']),
+                 
                     "<B>Datum consult:</B> " + str(current_row['consult_date_zorg_activiteiten']),
                     current_row['naslag_report_content'],
                     "<B>Uitleg taalmodel:</B> " + str(current_row['opmerkingen']),
@@ -137,6 +156,20 @@ def main():
                     "<B>Gecorrigeerde code: </B> " + str(st.session_state.filtered_df.loc[current_row.name, 'corrected_dbc'])
                 ]
             }
+            # List of additional date columns to check
+            date_columns = [
+                ('BP_measurement_date', 'Datum bloeddrukmeting'),
+                ('hart_stress_date', 'Datum MRI Hart stress'),
+                ('holter_date', 'Datum holter'),
+                ('ICD_date', 'Datum ICD'),
+                ('PM_date', 'Datum pacemaker'),
+                ('echo_hart_date', 'Datum echo hart')
+            ]
+
+            # Add rows for additional dates if they are not empty
+            for col, label in date_columns:
+                if pd.notna(current_row[col]):
+                    values_data['Value'].append(f"<B>{label}:</B> " + str(current_row[col]))
 
             df_values = pd.DataFrame(values_data).reset_index(drop=True)
 
@@ -205,7 +238,7 @@ def main():
 
 
         total_revenue_difference = evaluated_records[evaluated_records['dbc_diagnosis_code'] != evaluated_records['corrected_dbc']]['revenue_difference'].sum()
-        st.write(f"Totaal revenue difference van geëvalueerde records: **€{total_revenue_difference:,.2f}**")
+        st.write(f"Totale opbrengst van geëvalueerde records: **€{total_revenue_difference:,.2f}**")
         
         # Display download button
         csv = evaluated_records.to_csv(index=False)
