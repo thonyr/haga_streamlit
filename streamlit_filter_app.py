@@ -29,7 +29,7 @@ def process_csv(file):
     df = pd.read_csv(file, delimiter=';')
     df_sorted = df.sort_values(by=['predicted_switch','revenue_difference'], ascending=False)
     df_sorted['evaluated_by_doctor'] = False  # Add a column to track evaluation
-    st.session_state.available_time = len(df_sorted) / 60
+    st.session_state.available_time = 4
     return df_sorted
 
 # Main function for Streamlit app
@@ -93,10 +93,10 @@ def main():
             st.subheader('Geef beschikbare tijd aan:')
 
             available_time = st.slider(
-                "How much time do you have? (in hours)",
+                "Hoeveel tijd heb je? (in uren)",
                 min_value=1,
                 max_value=int(len(st.session_state.filtered_df) / 60),
-                value=int(st.session_state.available_time)  # Set default value to session state available time
+                value=int(st.session_state.available_time)  # Set default value to session state available time 
             )
 
             if available_time != st.session_state.available_time:
@@ -152,8 +152,7 @@ def main():
                     "<B>Datum consult:</B> " + str(current_row['consult_date_zorg_activiteiten']),
                     current_row['naslag_report_content'],
                     "<B>Uitleg taalmodel:</B> " + str(current_row['opmerkingen']),
-                    "<B>Huidige DBC-code:</B> " + str(current_row['dbc_diagnosis_code']),
-                    "<B>Gecorrigeerde code: </B> " + str(st.session_state.filtered_df.loc[current_row.name, 'corrected_dbc'])
+                    "<B>Huidige DBC-code:</B> " + str(current_row['dbc_diagnosis_code'])
                 ]
             }
             # List of additional date columns to check
