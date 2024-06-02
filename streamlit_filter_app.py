@@ -181,6 +181,11 @@ def main():
             # Display the markdown table
             st.markdown(markdown_table, unsafe_allow_html=True)
 
+            with st.expander(f"**Holter (12-4-2023)**"):
+                st.write('''
+                    Geen aanwijzingen voor significante ritmestoornissen.
+                ''')
+
             # Add space before navigation buttons
             st.write("")
 
