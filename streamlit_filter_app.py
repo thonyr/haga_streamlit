@@ -58,9 +58,9 @@ def main():
     if 'filtered_df' not in st.session_state:
         st.session_state.filtered_df = None
     if 'current_index' not in st.session_state:
-        st.session_state.current_index = None
+        st.session_state.current_index = None   
     if 'auto_next' not in st.session_state:
-        st.session_state.auto_next = False
+        st.session_state.auto_next = True
     if 'session_ended' not in st.session_state:
         st.session_state.session_ended = False
     if 'page' not in st.session_state:
@@ -206,7 +206,7 @@ def main():
                     st.rerun()
 
             # Add a checkbox for auto-next feature
-            st.session_state.auto_next = st.checkbox('Automatisch volgende notitie bij wijziging DBC', value=st.session_state.auto_next)
+            st.session_state.auto_next = st.checkbox('Automatisch volgende notitie bij wijziging DBC', value=st.session_state.auto_next) # 
 
             # Show the current record and total records
             st.write(f"Record {st.session_state.current_index + 1} van {len(st.session_state.filtered_df)}")
